@@ -3,23 +3,36 @@
 
 #include "cocos2d.h"
 
+/**
+@brief    The cocos2d Application.
 
-class  AppDelegate : private cocos2d::Application
+The reason for implement as private inheritance is to hide some interface call by CCDirector.
+*/
+/*代理类*/
+class  AppDelegate : private cocos2d::CCApplication
 {
 public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    virtual void initGLContextAttrs();//设置 OpenGL环境
+    /**
+    @brief    Implement CCDirector and CCScene init code here.
+    @return true    Initialize success, app continue.
+    @return false   Initialize failed, app terminate.
+    */
+    virtual bool applicationDidFinishLaunching();
 
+    /**
+    @brief  The function be called when the application enter background
+    @param  the pointer of the application
+    */
+    virtual void applicationDidEnterBackground();
 
-    virtual bool applicationDidFinishLaunching();//逻辑初始化
-
-
-    virtual void applicationDidEnterBackground();//切换到后台
-
-
-    virtual void applicationWillEnterForeground();//切换到前台
+    /**
+    @brief  The function be called when the application enter foreground
+    @param  the pointer of the application
+    */
+    virtual void applicationWillEnterForeground();
 };
 
 #endif // _APP_DELEGATE_H_
