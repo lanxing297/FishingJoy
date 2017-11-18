@@ -1,5 +1,5 @@
 #include "Fish.h"
-//#include"StatiData.h"
+//#include"StaticData.h"
 
 Fish::Fish(void)
 {
@@ -9,6 +9,7 @@ Fish::Fish(void)
 Fish::~Fish(void)
 {
 }
+
 
 Fish *Fish::create(FishType type)
 {
@@ -30,17 +31,14 @@ Fish *Fish::create(FishType type)
 
 bool Fish::init(FishType type)
 {
-	
 	if (!CCNode::init())
 	{
 		return false;
 	}
-
-	/*运行就出错？？*/
-	if (type <=k_Fish_Type_SmallFish || type >k_Fish_Type_Count)
+	if (type <= k_Fish_Type_SmallFish || type > k_Fish_Type_Count)
 	{
-		type = (FishType)1;
-	}//type = (FishType)0;
+		type = k_Fish_Type_SmallFish;
+	}
 	setType(type);
 	CCString *animationName = CCString::createWithFormat("fish_animation_%02d", _type);
 	CCAnimation *animation = CCAnimationCache::sharedAnimationCache()->animationByName(animationName->getCString());
@@ -49,6 +47,7 @@ bool Fish::init(FishType type)
 	_fishSprite->runAction(CCRepeatForever::create(animate));
 	this->addChild(_fishSprite);
 	return true;
+
 }
 
 
@@ -65,24 +64,3 @@ int Fish::getSpeed()
 {
 	return 200;
 }
-
-/*bool Fish::init(FishType type)
-{
-	if (!CCNode::init())
-	{
-		return false;
-	}
-	if (type < k_Fish_Type_SmallFish || type >= k_Fish_Type_Count)
-	{
-		type = k_Fish_Type_SmallFish;
-	}
-	setType(type);
-	CCString *animationName = CCString::createWithFormat("fish_animation_%02d",_type);
-	CCAnimation *animation = CCAnimationCache::sharedAnimationCache()->animationByName(animationName->getCString());
-	CCAnimate *animate = CCAnimate::create(animation);
-	fishSprite = CCSprite::create();
-	fishSprite->runAction(CCRepeatForever::create(animate));
-	this->addChild(fishSprite);
-	return true;
-
-}*/

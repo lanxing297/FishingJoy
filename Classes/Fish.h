@@ -7,7 +7,7 @@ USING_NS_CC;
 typedef enum{
 	k_Fish_Type_SmallFish = 0,
 	k_Fish_Type_Croaker,
-	//k_Fish_Type_Count=2,//鱼的数量，可以根据测试的需要调整位置，在这里值是2
+	k_Fish_Type_Count=18,//鱼的种类数量，可以根据测试的需要调整位置，在这里值是2
 	k_Fish_Type_AngleFish,
 	k_Fish_Type_Amphiprion,	//小丑鱼
 	k_Fish_Type_PufferS,	//刺豚
@@ -24,7 +24,7 @@ typedef enum{
 	k_Fish_Type_JadePerch,	//宝石鱼
 	k_Fish_Type_MarlineFish,
 	k_Fish_Type_PufferB,	//刺豚受到攻击
-	k_Fish_Type_Count=17,
+
 }FishType;
 
 //using namespace cocos2d;
@@ -40,7 +40,6 @@ public:
 	CC_SYNTHESIZE(FishType,_type,Type);
 
 protected:
-	CCSprite *_fishSprite;//鱼对应的精灵（图片）
-	
+	CCSprite *_fishSprite;
 };
 #endif

@@ -1,13 +1,13 @@
 #pragma once
-#include"cocos2d.h"
-/*²Ëµ¥²ã*/
+#include "cocos2d.h"
 using namespace cocos2d;
-class MenuLayer :public CCLayer
+class MenuLayer :
+	public CCLayer
 {
 public:
-	MenuLayer();
+	MenuLayer(void);
 	CREATE_FUNC(MenuLayer);
-	~MenuLayer();
-	bool init();
+	virtual bool init();
+	virtual ~MenuLayer(void);
 };
 
