@@ -36,7 +36,7 @@ bool CannonLayer::init()
 	return true;
 }
 
-void CannonLayer::onSwitchCannon(cocos2d::CCObject* sender)
+void CannonLayer::switchCannonCallback(cocos2d::CCObject* sender)
 {
 	CannonOperate operate = k_Cannon_Operate_Up;
 	if((CCMenuItemImage*)sender == _subMenuItem)
@@ -45,4 +45,14 @@ void CannonLayer::onSwitchCannon(cocos2d::CCObject* sender)
 	}
 	_weapon->changeCannon(operate);
 
+}
+
+void CannonLayer::aimAt(CCPoint target)
+{
+	_weapon->aimAt(target);
+}
+
+void CannonLayer::shootTo(CCPoint target)
+{
+	_weapon->shootTo(target);
 }

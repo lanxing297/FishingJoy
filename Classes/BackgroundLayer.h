@@ -1,20 +1,14 @@
 #pragma once
 #include "cocos2d.h"
-using namespace cocos2d;
+
+USING_NS_CC;
+
 class BackgroundLayer :
 	public CCLayer
 {
 public:
 	BackgroundLayer(void);
-	static BackgroundLayer *create(){
-		BackgroundLayer *layer=new BackgroundLayer();
-		if(layer &&layer->init()){
-			return layer;
-		}
-		else{
-			delete layer;
-		}
-	}
+	CREATE_FUNC(BackgroundLayer)
 	virtual bool init();
 	virtual ~BackgroundLayer(void);
 };
