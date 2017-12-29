@@ -6,8 +6,16 @@
 #include "CannonLayer.h"
 #include "TouchLayer.h"
 #include "Fish.h"
-
+#include "PanelLayer.h"
+#include "FishJoyData.h"
+#include "GoldCounterLayer.h"
+#include "PersonalAudioEngine.h"
 USING_NS_CC;
+
+typedef enum{
+	k_Operate_Pause = 0,
+	k_Operate_Resume
+}OperateFlag;
 
 class GameScene :
 	public CCScene
@@ -19,12 +27,17 @@ public:
 	virtual ~GameScene();
 	void cannonAimAt(CCPoint target);
 	void cannonShootTo(CCPoint target);
+	void alterGold(int delta);
+	void onEnter();
 protected:
 	BackgroundLayer* _backgroundLayer;
 	FishLayer* _fishLayer;
 	MenuLayer* _menuLayer;
 	CannonLayer* _cannonLayer;
 	TouchLayer* _touchLayer;
+	PanelLayer* _paneLayer;
+
+
 	void preloadResources(void);
 	bool checkOutCollisionBetweenFishesAndBullet(Bullet* bullet);
 	void checkOutCollision();

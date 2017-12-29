@@ -14,6 +14,7 @@
     <ProjectGuid>{76A39BB2-9B84-4C65-98A5-654D86B86F2A}</ProjectGuid>
     <RootNamespace>test_win32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -87,6 +88,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <HeapReserveSize>102400000</HeapReserveSize>
+      <StackReserveSize>102400000</StackReserveSize>
+      <HeapCommitSize>102400000</HeapCommitSize>
+      <StackCommitSize>102400000</StackCommitSize>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -133,32 +138,55 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
+    <ClCompile Include="..\Classes\Bullet.cpp" />
+    <ClCompile Include="..\Classes\Cannon.cpp" />
     <ClCompile Include="..\Classes\CannonLayer.cpp" />
+    <ClCompile Include="..\Classes\Counter.cpp" />
     <ClCompile Include="..\Classes\Fish.cpp" />
+    <ClCompile Include="..\Classes\FishJoyData.cpp" />
     <ClCompile Include="..\Classes\FishLayer.cpp" />
+    <ClCompile Include="..\Classes\FishNet.cpp" />
     <ClCompile Include="..\Classes\GameMenuLayer.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\GoldCounterLayer.cpp" />
+    <ClCompile Include="..\Classes\LoadingLayer.cpp" />
     <ClCompile Include="..\Classes\MenuLayer.cpp" />
-    <ClCompile Include="..\Classes\PaneLayer.cpp" />
+    <ClCompile Include="..\Classes\PanelLayer.cpp" />
+    <ClCompile Include="..\Classes\PersonalAudioEngine.cpp" />
+    <ClCompile Include="..\Classes\ProgressBar.cpp" />
+    <ClCompile Include="..\Classes\ScheduleCountDown.cpp" />
     <ClCompile Include="..\Classes\StaticData.cpp" />
+    <ClCompile Include="..\Classes\TouchLayer.cpp" />
+    <ClCompile Include="..\Classes\Weapon.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\AppMacros.h" />
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
+    <ClInclude Include="..\Classes\Bullet.h" />
+    <ClInclude Include="..\Classes\Cannon.h" />
     <ClInclude Include="..\Classes\CannonLayer.h" />
+    <ClInclude Include="..\Classes\Counter.h" />
     <ClInclude Include="..\Classes\Fish.h" />
+    <ClInclude Include="..\Classes\FishJoyData.h" />
     <ClInclude Include="..\Classes\FishLayer.h" />
+    <ClInclude Include="..\Classes\FishNet.h" />
     <ClInclude Include="..\Classes\GameMenuLayer.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\GoldCounterLayer.h" />
+    <ClInclude Include="..\Classes\LoadingLayer.h" />
     <ClInclude Include="..\Classes\MenuLayer.h" />
-    <ClInclude Include="..\Classes\PaneLayer.h" />
+    <ClInclude Include="..\Classes\PanelLayer.h" />
+    <ClInclude Include="..\Classes\PersonalAudioEngine.h" />
+    <ClInclude Include="..\Classes\ProgressBar.h" />
+    <ClInclude Include="..\Classes\ProgressDelegate.h" />
+    <ClInclude Include="..\Classes\ScheduleCountDown.h" />
+    <ClInclude Include="..\Classes\ScheduleCounterDelegate.h" />
     <ClInclude Include="..\Classes\StaticData.h" />
+    <ClInclude Include="..\Classes\TouchLayer.h" />
+    <ClInclude Include="..\Classes\Weapon.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\cocos2dx\proj.win32\cocos2d.vcxproj">
@@ -181,9 +209,6 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
       <Project>{207bc7a9-ccf1-4f2f-a04d-45f72242ae25}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="FishingJoy.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,13 +1,23 @@
 #pragma once
 #include "cocos2d.h"
-using namespace cocos2d;
-class PaneLayer :
-	public CCLayer
+#include "GoldCounterLayer.h"
+#include "ScheduleCounterDelegate.h"
+#include "ScheduleCountDown.h"
+USING_NS_CC;
+
+class PanelLayer:public cocos2d::CCLayer,public ScheduleCounterDelegate
 {
 public:
-	PaneLayer(void);
-	CREATE_FUNC(PaneLayer);
 	virtual bool init();
-	virtual ~PaneLayer(void);
+	PanelLayer(void);
+	~PanelLayer(void);
+
+    CREATE_FUNC(PanelLayer)
+    CC_SYNTHESIZE_READONLY(GoldCounterLayer *, _goldCounter, GoldCounter)
+
+protected:
+	virtual void scheduleTimeUp();
+	virtual void setScheduleNumber(int number);
+	CCLabelAtlas *_scheduleLabel;
 };
 

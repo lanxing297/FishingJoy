@@ -1,5 +1,4 @@
 #include "GameScene.h"
-
 GameScene::GameScene()
 {
 }
@@ -10,8 +9,6 @@ bool GameScene::init()
 	{
 		CC_BREAK_IF(!CCScene::init());
 		preloadResources();
-		//因为~GameScene()中需要CC_SAFE_RELEASE(_menuLayer)， 如果其它层创建失败，_menuLayer将不创建，
-		//所以_menuLayer要先于其他层创建， 否则将报 "reference count greater than 0" 错误
 		_menuLayer = MenuLayer::create(); 
 		CC_BREAK_IF(!_menuLayer);
 		CC_SAFE_RETAIN(_menuLayer); 
@@ -27,6 +24,10 @@ bool GameScene::init()
 		_touchLayer = TouchLayer::create();
 		CC_BREAK_IF(!_touchLayer);
 		this->addChild(_touchLayer);
+		_paneLayer = PanelLayer::create();
+		CC_BREAK_IF(!_paneLayer);
+		this->addChild(_paneLayer);
+		_paneLayer->getGoldCounter()->setNumber(FishJoyData::getInstance()->getGold());
 		this->scheduleUpdate();
 		return true;
 	} while (0);
@@ -35,13 +36,13 @@ bool GameScene::init()
 
 void GameScene::preloadResources(void)
 {
+	PersonalAudioEngine::getInstance();
 	CCSpriteFrameCache* spriteFrameCache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	//修改以下plist文件， 删除key中的中文， 否则spriteFrameByName函数无法找到Frame，将返回NULL
-	spriteFrameCache->addSpriteFramesWithFile("FishActor-Large-ipadhd.plist");		//修改metadata->realTextureFileName->FishActor-Large-ipadhdhd.png, textureFileName->FishActor-Large-ipadhd.png
-	spriteFrameCache->addSpriteFramesWithFile("FishActor-Marlin-ipadhd.plist");		//修改metadata->realTextureFileName->FishActor-Marlin-ipadhdhd.png, textureFileName->FishActor-Marlin-ipadhd.png
-	spriteFrameCache->addSpriteFramesWithFile("FishActor-Shark-ipadhd.plist");		//同上
-	spriteFrameCache->addSpriteFramesWithFile("FishActor-Small-ipadhd.plist");		//同上
-	spriteFrameCache->addSpriteFramesWithFile("FishActor-Mid-ipadhd.plist");			//同上
+	spriteFrameCache->addSpriteFramesWithFile("FishActor-Large-ipadhd.plist");		
+	spriteFrameCache->addSpriteFramesWithFile("FishActor-Marlin-ipadhd.plist");		
+	spriteFrameCache->addSpriteFramesWithFile("FishActor-Shark-ipadhd.plist");		
+	spriteFrameCache->addSpriteFramesWithFile("FishActor-Small-ipadhd.plist");		
+	spriteFrameCache->addSpriteFramesWithFile("FishActor-Mid-ipadhd.plist");		
 	spriteFrameCache->addSpriteFramesWithFile("cannon-ipadhd.plist");
 	spriteFrameCache->addSpriteFramesWithFile("Item-chaojiwuqi-ipadhd.plist");
 
@@ -85,9 +86,16 @@ void GameScene::cannonAimAt(CCPoint target)
 
 void GameScene::cannonShootTo(CCPoint target)
 {
-	_cannonLayer->shootTo(target);
+	int cost = _cannonLayer->getWeapon()->getCannonType() + 1;
+	if (FishJoyData::getInstance()->getGold() >= cost)
+	{
+		PersonalAudioEngine::sharedEngine()->playEffect("bgm_fire.aif");
+		_cannonLayer->shootTo(target);
+		alterGold(-cost);
+	}
+
 }
-//鱼和子弹的碰撞
+
 bool GameScene::checkOutCollisionBetweenFishesAndBullet(Bullet* bullet)
 {
 	CCPoint bulletPos = bullet->getCollosionPoint();
@@ -126,19 +134,24 @@ void GameScene::update(float delta)
 {
 	checkOutCollision();
 }
-//鱼被捕获的概率
+
 void GameScene::fishWillBeCaught(Fish* fish)
 {
-	float weaponPercents[k_Cannon_Count] = { 0.3, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
-	float fishPercents[	k_Fish_Type_Count] = { 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4 };
-	int cannonType = _cannonLayer->getWeapon()->getCannonType();
-	int fishType = fish->getType();
-	if(CCRANDOM_0_1() < 1.1)
+	float weaponPercents[k_Cannon_Count] = { 0.3f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f };
+	float fishPercents[	k_Fish_Type_Count] = { 1.0f, 0.95f, 0.95f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f, 0.65f, 0.6f, 0.55f, 0.5f, 0.45f, 0.4f, 0.35f, 0.3f, 0.25f, 0.2f };
+	int _cannonType = _cannonLayer->getWeapon()->getCannonType();
+	int _fishType = fish->getType();
+	float _percentage =weaponPercents[_cannonType] * fishPercents[_fishType];
+	if(CCRANDOM_0_1() < _percentage)
 	{
 		fish->beCaught();
+		PersonalAudioEngine::sharedEngine()->playEffect("bgm_net.mp3");
+		int reward = (_fishType+1)*10;
+		this->alterGold(reward);
 	}
+	
 }
-//鱼和渔网的碰撞
+
 void GameScene::checkOutCollisionBetweenFishesAndFishingNet(Bullet* bullet)
 {
 	Weapon* weapon = _cannonLayer->getWeapon();
@@ -153,4 +166,15 @@ void GameScene::checkOutCollisionBetweenFishesAndFishingNet(Bullet* bullet)
 			fishWillBeCaught(fish);
 		}
 	}
+}
+void GameScene::alterGold(int delta)
+{
+	FishJoyData* _fishJoyData = FishJoyData::getInstance();
+	_fishJoyData->alterGold(delta);
+	_paneLayer->getGoldCounter()->setNumber(_fishJoyData->getGold());
+}
+void GameScene::onEnter()
+{
+	CCScene::onEnter();
+	PersonalAudioEngine::getInstance()->playBackgroundMusic(3);
 }
